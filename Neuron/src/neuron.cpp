@@ -1,38 +1,39 @@
 #include "neuron.hpp"
  #include <iostream>
-const double tau = 20.0;
-const double h = 0.1;
-const double R = 20;
-const double tau_ref = 2.0;
+#include "constant.hpp"
 
-Neuron::Neuron(const double& memPot, const int& spikeNb) : membrane_potential_(-70) {}
+Neuron::Neuron() : membrane_potential_(10) {}
 
 Neuron::~Neuron() {}
 
-Neuron::Neuron() : membrane_potential_(0), spike_number_(0) /*, times_(0) */{}
-
+//update the membrane potential of the neuron depending on if it is refractory
 void Neuron::update(const double& t, const double& input_current) {
-		if (!refractory(t)) {
-	membrane_potential_ = exp(-h/tau)*membrane_potential_	+ input_current*R*(1-exp(-h/tau));
-		} else {
-			membrane_potential_ = exp(-h/tau)*membrane_potential_;
-		}
 
+	if (membrane_potential_ >= V_threshold) {
+		addSpikeTime(t);	
+	}
+
+	membrane_potential_ = exp(-H/TAU)*membrane_potential_;
+	
+	if (!isRefractory(t)) {
+		membrane_potential_ += input_current*R*(1-exp(-H/TAU));
+	} else {
+		membrane_potential_ = 0.0;
+	}
 }
 
-bool Neuron::refractory(const double& t) const {
+//return if the neuron is refractory
+bool Neuron::isRefractory(const double& t) const {
+		
 	//for the first loop, the vector is empty 
-	if (times_.size() != 0) {
-		
-		return ((t-times_.back()) <= tau_ref);
-		
-	} else {
-
+	if (times_.size() != 0) {		
+		return ((t-times_.back()) <= TAU_REFRACTORY);	
+	} else {		
 	//when there hasn't been any spike, the neuron cannot be refractory
 		return false;
 	}
 }
-
+//different getters
 int Neuron::getTimeSize() const {
 	return times_.size();
 }
@@ -41,20 +42,36 @@ double Neuron::getTimeSpike(const int& i) const {
 	return times_[i];
 }
 
+double Neuron::getMembranePotential() const {
+	return membrane_potential_;
+}
+std::vector<double> Neuron::getTimeSpikeTab() const {
+	return times_;
+}
+
+//add a new spike
 void Neuron::addSpikeTime(const double& t) {
 	times_.push_back(t);
 }
 
-double Neuron::getMembranePotential() const {
-	return membrane_potential_;
+//store the times when spikes occured in a file
+void Neuron::spikeTimeEnter(std::ofstream& file) const {
+	
+	if (file.fail()) {
+		std::cerr << "Error ";
+	} else {
+		file << "Spike time : " << std::endl;
+		for (int i(0); i < times_.size(); ++i) {
+			file << times_[i] << std::endl;
+		}
+	}		
 }
 
-int Neuron::getSpikeNumber() const {
-	return spike_number_;
-}
-void Neuron::setSpikeNumber(const int& number) {
-	spike_number_ = number;
-}
-void Neuron::setMembranePotential(const double& pot) {
-	membrane_potential_ = pot;
+//store the potential in a file
+void Neuron::potentialEnter(std::ofstream& file) const {
+	if (file.fail()) {
+			std::cerr << "Error ";
+		} else {
+			file << membrane_potential_ << std::endl;
+		}	
 }

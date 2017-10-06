@@ -3,89 +3,56 @@
 #include <fstream>
 
 #include "neuron.hpp"
+#include "constant.hpp"
 
 using namespace std;
 
-const double h = 0.1;
 
-const double tau = 20.0;
-const double C = 1;
-//membrane resistance
-const double R = (tau/C);
-const double V_threshold = 20;
-//to run the simulation faster
-const double n = 1;
-
+void initialiser(double& a, double& b, double& current);
 
 int main() {
 	Neuron neuron;
 	double  simTime(T_SART);
 	double input_current_ext(0.0);
 	double a, b;
+	
+	//file where the data would be collected
 	ofstream entree_donne("times_spike");
 
+	//ask the user to enter data for the time interval and the membrane potential
+	initialiser(a, b, input_current_ext);
+	entree_donne << "Membrane potential: " << endl;
 	
-	cout << "Choose an external current : ";
-	cin >> input_current_ext;
-	cout << "Choose a time interval: ";
-	cin >> a;
-	cin >> b;
-	cout << "[ " << a << ", " << b << ")" << endl;
-	cout << "ou ";
-	double input_current;
-	cout<<"it " << simTime;
-	cout << " V " << neuron.getMembranePotential() << " spike " << neuron.getSpikeNumber() << " ";
-	
-	cout << " input: " << input_current_ext << endl;
-	cout << neuron.getTimeSize() << " ";
-	int i(0);
+	double input_current(0.0);
+	//run simulation
 	while (simTime <= T_STOP) {
-		//input current = i(t)
-		
+
 		if (simTime >= a and simTime < b) {
-			
-			++i;
 			input_current = input_current_ext;
-		 
 		 } else { 
-			
 		 	input_current = 0.0;
 		 }
-		if (neuron.refractory(simTime)) {
+		//to store the membrane potential
+		neuron.potentialEnter(entree_donne);
+		neuron.update(simTime, input_current);
+		
+		simTime = simTime + N*H;
 
-			neuron.setMembranePotential(0.0);
-		
-		} else if (neuron.getMembranePotential() >= V_threshold) {
-
-			 neuron.addSpikeTime(simTime);
-			
-		}
-		if (entree_donne.fail()) {
-		cerr << "Erreur ";
-	} else {
-		entree_donne << neuron.getMembranePotential() << endl;
 	}
-		neuron.update(simTime+n*h, input_current);
-		
-		simTime = simTime + n*h;
-		
-	
-	}
-	cout << "inpt curr aff " << i << endl;
-	cout << neuron.getTimeSize();
-	
-	
-		
-	
-	if (entree_donne.fail()) {
-		cerr << "Erreur ";
-	} else {
-		entree_donne << "Spike time : " << endl;
-		for (int i(0); i < neuron.getTimeSize(); ++i) {
-			entree_donne << neuron.getTimeSpike(i) << endl;
-		}
-		entree_donne.close();
-	}
+	//to store the spike times
+	neuron.spikeTimeEnter(entree_donne);
+	entree_donne.close();
 	return 0;
 }
 
+void initialiser(double& a, double& b, double& input_current_ext) {
+	cout << "Choose an external current: ";
+	cin >> input_current_ext;
+	do {	
+		cout << "Choose a time interval: (a < b), a and b must be positive numbers ";
+		cin >> a;
+		cin >> b;
+	} while (a >= b or a < 0.0 or b < 0.0) ;
+	
+	cout << "[a,b] = [" << a << ", " << b << "]" << endl;
+}
