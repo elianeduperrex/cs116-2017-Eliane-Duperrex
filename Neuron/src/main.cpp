@@ -7,8 +7,7 @@
 using namespace std;
 
 const double h = 0.1;
-const double T_SART = 0.0;
-const double T_STOP = 100.0;
+
 const double tau = 20.0;
 const double C = 1;
 //membrane resistance
