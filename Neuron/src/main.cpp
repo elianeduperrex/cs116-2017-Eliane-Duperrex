@@ -26,7 +26,7 @@ int main() {
 	double input_current(0.0);
 	//run simulation
 	while (simTime <= T_STOP) {
-
+		
 		if (simTime >= a and simTime < b) {
 			input_current = input_current_ext;
 		 } else { 
@@ -34,7 +34,9 @@ int main() {
 		 }
 		//to store the membrane potential
 		neuron.potentialEnter(entree_donne);
-		neuron.update(simTime, input_current);
+		if (neuron.update(simTime, input_current)) {
+			cout << "Spike occurs at " << simTime << " ms" << endl;
+		}
 		
 		simTime = simTime + N*H;
 

@@ -2,8 +2,8 @@
 #define CONSTANT_HPP
 
 ///Constants specific to the time
-const double T_SART = 0.0;
-const double T_STOP = 100.0;
+const double T_SART = 100.0;
+const double T_STOP = 400.0;
 //dt
 const double H = 0.1;
 //to run the simulation faster

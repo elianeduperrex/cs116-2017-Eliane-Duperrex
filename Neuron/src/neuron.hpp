@@ -12,6 +12,8 @@ class Neuron {
 		//times when spikes occure
 		std::vector<double> times_;
 		
+		double clock_;
+		
 		bool isRefractory(const double& t) const;
 	
 	public:		
@@ -24,7 +26,7 @@ class Neuron {
 		double getTimeSpike(const int& i) const;
 		std::vector<double> getTimeSpikeTab() const;
 		
-		void update(const double& t, const double& input_current);
+		bool update(const double& t, const double& input_current);
 		void addSpikeTime(const double& t);
 		
 		//methods to store data in a file
