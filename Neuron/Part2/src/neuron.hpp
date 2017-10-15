@@ -14,7 +14,9 @@ class Neuron {
 		
 		double clock_;
 		
-		bool isRefractory(const double& t) const;
+		bool isRefract_;
+		
+		void isRefractory(const double& t);
 	
 	public:		
 		Neuron();
@@ -25,13 +27,19 @@ class Neuron {
 		int getTimeSize() const;
 		double getTimeSpike(const int& i) const;
 		std::vector<double> getTimeSpikeTab() const;
+		bool getRefractoryState() const;
 		
-		bool update(const double& t, const double& input_current);
+		void setMembranePotential(const double& memb);
+		bool update(const double& t, const double& input_current, bool spike);
+		void receive(const double& j);
+		
 		void addSpikeTime(const double& t);
 		
 		//methods to store data in a file
 		void spikeTimeEnter(std::ofstream& file) const;	
-		void potentialEnter(std::ofstream& file) const;	
+		void potentialEnter(std::ofstream& file) const;
+			
+		
 };
 
 #endif

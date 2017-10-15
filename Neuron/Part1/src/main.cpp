@@ -25,7 +25,7 @@ int main() {
 	
 	double input_current(0.0);
 	//run simulation
-	while (simTime <= T_STOP) {
+	while (simTime < T_STOP) {
 		
 		if (simTime >= a and simTime < b) {
 			input_current = input_current_ext;

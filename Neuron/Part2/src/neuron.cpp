@@ -1,43 +1,45 @@
 #include "neuron.hpp"
  #include <iostream>
+ #include <cassert>
 #include "constant.hpp"
 
-Neuron::Neuron() : membrane_potential_(0.0), clock_(0.0) {}
+//when there hasn't been any spike, the neuron cannot be refractory
+Neuron::Neuron() : membrane_potential_(0.0), clock_(0.0), isRefract_(false) {}
 
 Neuron::~Neuron() {}
 
 //update the membrane potential of the neuron depending on if it is refractory
-bool Neuron::update(const double& t, const double& input_current) {
-	bool spike(false);
-	const double T_STOP = clock_ + t;
-	
-	if (membrane_potential_ >= V_threshold) {
-		addSpikeTime(t);
-		spike = true;	
-		membrane_potential_ = 0.0; //pas forcément utile
+bool Neuron::update(const double& t, const double& input_current, bool spike) {
+	bool hasSpike(false);
+	assert(t > 0.0);
+	const double T_STOP_ = clock_ + t;
+	while (clock_ < T_STOP_) {
+		if (membrane_potential_ > V_threshold) {
+			addSpikeTime(clock_);
+			hasSpike = true;	
+			isRefract_ = true;
+		}
+		isRefractory(clock_);
+		if (!isRefract_) {
+			membrane_potential_ = exp(-H/TAU)*membrane_potential_ + input_current*R*(1-exp(-H/TAU));
+			if (spike) {
+				receive(J);
+			}
+		} else {
+			membrane_potential_ = V_RESET;
+		}
+		clock_ += t;
 	}
-
-	//membrane_potential_ = exp(-H/TAU)*membrane_potential_;
 	
-	if (!isRefractory(t)) {
-		membrane_potential_ = exp(-H/TAU)*membrane_potential_ + input_current*R*(1-exp(-H/TAU));
-	} else {
-		membrane_potential_ = 0.0;
-	}
-	
-	return spike;
+	return hasSpike;
 }
 
 //return if the neuron is refractory
-bool Neuron::isRefractory(const double& t) const {
-		
-	//for the first loop, the vector is empty 
+void  Neuron::isRefractory(const double& t) {		
+	//for te first loop, the vector is empty 
 	if (times_.size() != 0) {		
-		return (times_.back() >0 and (t-times_.back()) <= TAU_REFRACTORY);	
-	} else {		
-	//when there hasn't been any spike, the neuron cannot be refractory
-		return false;
-	}
+		isRefract_ = (times_.back() >0 and (t-times_.back()) <= TAU_REFRACTORY);	
+	} 		
 }
 //different getters
 int Neuron::getTimeSize() const {
@@ -53,6 +55,10 @@ double Neuron::getMembranePotential() const {
 }
 std::vector<double> Neuron::getTimeSpikeTab() const {
 	return times_;
+}
+
+bool Neuron::getRefractoryState() const {
+	return isRefract_;
 }
 
 //add a new spike
@@ -80,4 +86,12 @@ void Neuron::potentialEnter(std::ofstream& file) const {
 		} else {
 			file << membrane_potential_ << std::endl;
 		}	
+}
+
+void Neuron::setMembranePotential(const double& memb) {
+	membrane_potential_ = memb;
+}
+
+void Neuron::receive(const double& j) {
+	membrane_potential_ += j;
 }
