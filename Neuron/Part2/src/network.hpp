@@ -17,9 +17,12 @@ class Network {
 		Network(vector<Neuron> neurons, vector<vector<Index> > connexion) ;
 		~Network();
 		void setConnexion(const Neuron& neur);
-		void update(const double& t, const double& input_current, const bool& spike);
+		void update(const step& t, std::ofstream& file);
+		
 		//method to store the spike time of each neurons
 		void storeTimeSpike(std::ofstream& file) const;
+		void storePotential(const Index& i, std::ofstream& file) const;
+		void setInputCurrentFirst(const double& input_current);
 };
 
 #endif

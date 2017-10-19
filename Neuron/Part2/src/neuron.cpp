@@ -1,18 +1,23 @@
 #include "neuron.hpp"
  #include <iostream>
  #include <cassert>
+ #include <cmath>
 
 
 //when there hasn't been any spike, the neuron cannot be refractory
-Neuron::Neuron() : membrane_potential_(0.0), clock_(0.0), isRefract_(false) {}
+Neuron::Neuron() : 	membrane_potential_(0.0), clock_(T_START), 
+					isRefract_(false), input_current_(0.0) {
+	for (auto& ind : timeDelayBuffer_) {
+		ind = 0.0;
+		}
+}
 
 Neuron::~Neuron() {}
 
 //update the membrane potential of the neuron depending on if it is refractory
-bool Neuron::update(const double& t, const double& input_current, bool spike) {
+bool Neuron::update(const step& t) {
 	bool hasSpike(false);
-	assert(t > 0.0);
-	const double T_STOP_ = clock_ + t;
+	const step T_STOP_ = clock_ + t;
 	while (clock_ < T_STOP_) {
 		if (membrane_potential_ >= V_threshold) {
 			addSpikeTime(clock_);
@@ -21,46 +26,39 @@ bool Neuron::update(const double& t, const double& input_current, bool spike) {
 		}
 		isRefractory(clock_); 
 		if (!isRefract_) {
-			membrane_potential_ = exp(-H/TAU)*membrane_potential_ + input_current*R*(1-exp(-H/TAU));
-			if (timeDelay.size() != 0) {
-				for (size_t i(0); i < timeDelay.size(); ++i) {
-					if(abs(clock_ - timeDelay[i][0]) < 0.00001) {
-						receive(timeDelay[i][1]);
-					}
-				}
-			}
-			if (spike) {
-				receive(J);
-			}
+			membrane_potential_ = C1*membrane_potential_ + input_current_*C2;
+			size_t size(timeDelayBuffer_.size());
+			membrane_potential_ += timeDelayBuffer_[clock_%size];
+			timeDelayBuffer_[clock_%size] = 0.0;
 		} else {
 			membrane_potential_ = V_RESET;
 		}
-		clock_ += t;
+		clock_ ++;
 	}
 	
 	return hasSpike;
 }
 
 //return if the neuron is refractory
-void  Neuron::isRefractory(const double& t) {		
+void  Neuron::isRefractory(const step& t) {		
 	//for te first loop, the vector is empty 
 	if (times_.size() != 0) {		
-		isRefract_ = (times_.back() >0 and (t-times_.back()) <= TAU_REFRACTORY);	
+		isRefract_ = t-times_.back() < TAU_REFRACTORY;	
 	} 		
 }
 //different getters
-int Neuron::getTimeSize() const {
+Index Neuron::getTimeSize() const {
 	return times_.size();
 }
 
-double Neuron::getTimeSpike(const int& i) const {
+step Neuron::getTimeSpike(const int& i) const {
 	return times_[i];
 }
 
 double Neuron::getMembranePotential() const {
 	return membrane_potential_;
 }
-std::vector<double> Neuron::getTimeSpikeTab() const {
+std::vector<step> Neuron::getTimeSpikeTab() const {
 	return times_;
 }
 
@@ -69,32 +67,36 @@ bool Neuron::getRefractoryState() const {
 }
 
 Index Neuron::getIndex() const {
-	return index;
+	return index_;
 }
 
-double Neuron::getClock() const {
+step Neuron::getClock() const {
 	return clock_;
 }
 
+double Neuron::getInputCurrent() const {
+	return input_current_;
+}
+
 //add a new spike
-void Neuron::addSpikeTime(const double& t) {
+void Neuron::addSpikeTime(const step& t) {
 	times_.push_back(t);
 }
 
 //store the times when spikes occured in a file
-void Neuron::spikeTimeEnter(std::ofstream& file) const {
+void Neuron::storeSpikeTime(std::ofstream& file) const {
 	
 	if (file.fail()) {
 		std::cerr << "Error ";
 	} else {
 		for (size_t i(0); i < times_.size(); ++i) {
-			file << times_[i] << " ";
+			file << times_[i]*H << " ";
 		}
 	}		
 }
 
 //store the potential in a file
-void Neuron::potentialEnter(std::ofstream& file) const {
+void Neuron::storePotentialMembrane(std::ofstream& file) const {
 	if (file.fail()) {
 			std::cerr << "Error ";
 		} else {
@@ -106,11 +108,17 @@ void Neuron::setMembranePotential(const double& memb) {
 	membrane_potential_ = memb;
 }
 
+void Neuron::setInputCurrent(const double& input) {
+	input_current_ = input;
+	assert(input_current_ == input);
+}
+
 void Neuron::receive(const double& j) {
 	membrane_potential_ += j;
 }
 
-void Neuron::receive(const double& j, const double& t) {
-	assert(t != 0);
-	timeDelay.push_back({t, j});
+void Neuron::receive(const double& j, const step& t) {
+	size_t size(timeDelayBuffer_.size());
+	assert(t%size < size);
+	timeDelayBuffer_[t%size] += j;
 }

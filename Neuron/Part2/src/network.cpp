@@ -28,18 +28,20 @@ Network::~Network () {
 	}
 }
 
-void Network::update(const double& t, const double& input_current, const bool& spike) {
+void Network::update(const step& t, std::ofstream& file) {
 	assert(neurons_.size() != 0);
+	bool spike(false);
 	for (size_t i(0); i < neurons_.size(); ++i) {
-		bool spik(false);
+		spike = false;
 		assert(neurons_[i] != nullptr);
-		spik = neurons_[i]->update(t, input_current, spike);
-		if (spik) {
+		storePotential(i, file);
+		spike = neurons_[i]->update(t);
+		if (spike) {
 			assert(neurons_[i] != nullptr);
 			//give to the connected neuron the spike
 			for (size_t j(0); j < connexion_[i].size(); ++j) {
 				assert(neurons_[connexion_[i][j]] != nullptr);
-				neurons_[connexion_[i][j]]-> receive(J, neurons_[i]->getClock() + D);
+				neurons_[connexion_[i][j]]-> receive(J, neurons_[i]->getClock() + DELAY);
 			}
 		}
 	}
@@ -49,9 +51,18 @@ void Network::storeTimeSpike(std::ofstream& file) const {
 	int i(1);
 	for (auto& neuron : neurons_) {
 		file << "Spike time of neuron " << i << " : " << endl;
-		neuron -> spikeTimeEnter(file);
+		neuron -> storeSpikeTime(file);
 		file << endl;
 		++i;
 	}
 }
 
+void Network::setInputCurrentFirst(const double& input_current) {
+	neurons_[0]->setInputCurrent(input_current);
+	assert(neurons_[0]->getInputCurrent() == input_current);
+}
+
+void Network::storePotential(const Index& i, std::ofstream& file) const {
+		file << "Neuron " << i+1 << " : potential ";
+		neurons_[i]->storePotentialMembrane(file);
+}
