@@ -12,7 +12,7 @@ add_subdirectory(gtest)
 include_directories(${gtesst_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
 
 add_executable(../bin/Neuron neuron.cpp main.cpp network.cpp )
-add_executable(UnitTest test.cpp neuron.cpp)
+add_executable(UnitTest test.cpp neuron.cpp network.cpp)
 
 target_link_libraries(UnitTest gtest gtest_main)
 

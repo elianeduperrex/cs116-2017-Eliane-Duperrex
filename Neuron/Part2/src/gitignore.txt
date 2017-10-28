@@ -3,4 +3,7 @@
 !*.h*
 !*.c*
 !gtest*
+!latex*
+!html*
 !CMakeLists.txt
+

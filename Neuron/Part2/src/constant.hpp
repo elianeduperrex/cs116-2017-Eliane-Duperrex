@@ -25,22 +25,30 @@ const double C = 1.0;
 //membrane resistance
 const double R = (TAU/C);
 //potential threshold
-const double V_threshold = 20.0;
+const double V_THRESHOLD = 20.0;
 //resset potential
 const double V_RESET = 0.0;
+//potential extern
+const double V_EXT = 2*V_THRESHOLD;
 
 //amplitude between vthr and vreset in mV
 const double J = 0.1; 
 
 //delay
-const double D = 0.2;
-
+const double D = 1.5;
 const step DELAY = D/H;
 
 const step BufferSize = ((D/H)+1);
 
-const double C1 = exp(-H/TAU);
+const double C1 = exp(-H/TAU); //constant for ODE
 const double C2 = R*(1-exp(-H/TAU));
+
+const int N_EXCITATORY = 100;
+const int N_INHIBITORY = 25;
+const int N_TOTAL = N_EXCITATORY + N_INHIBITORY; 
+const int C_EXCITATORY = 0.1*N_EXCITATORY;
+const int C_INHIBITORY = 0.1*N_INHIBITORY;
+const int C_TOTAL = C_EXCITATORY + C_INHIBITORY;
 
 //for tab index
 typedef unsigned int Index;

@@ -28,19 +28,8 @@ int main() {
 	//ask the user to enter data for the time interval and the membrane potential
 	initialiser(a, b, input_current_ext);
 
-	//initialisation of the network
-	vector<Neuron> neurons;
-	Neuron neuron1, neuron2,neuron3;
-	neurons.push_back((neuron1));
-	neurons.push_back((neuron2));
-	neurons.push_back(neuron3);
-	vector<vector<Index> > connexion(neurons.size());
-	connexion[0].push_back(1);
-	connexion[1].push_back(0);
-	connexion[0].push_back(2);
-	connexion[2].push_back(0);	
-	assert(connexion.size() != 0);
-	Network networkNeuron(neurons, connexion);
+	
+	Network networkNeuron;
 	
 	double input_current(0.0);
 	
@@ -52,11 +41,12 @@ int main() {
 		 	input_current = 0.0;
 		}	
 		networkNeuron.setInputCurrentFirst(input_current);
-		networkNeuron.update(N, entree_donne);
+		networkNeuron.update(N);
 		simTime += N;
 	}
 	//to store the spike times
 	networkNeuron.storeTimeSpike(entree_donne);
+	networkNeuron.storeConnexion(entree_donne);
 	entree_donne.close();
 	runTest();
 	return 0;

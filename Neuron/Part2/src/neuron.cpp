@@ -2,11 +2,17 @@
  #include <iostream>
  #include <cassert>
  #include <cmath>
-
+#include <random>
 
 //when there hasn't been any spike, the neuron cannot be refractory
 Neuron::Neuron() : 	membrane_potential_(0.0), clock_(T_START), 
-					isRefract_(false), input_current_(0.0) {
+					isRefract_(false), input_current_(0.0), isExcitatory_(true) {
+	for (auto& ind : timeDelayBuffer_) {
+		ind = 0.0;
+		}
+}
+Neuron::Neuron(const bool& isExcitatory) : 	membrane_potential_(0.0), clock_(T_START), 
+					isRefract_(false), input_current_(0.0), isExcitatory_(isExcitatory) {
 	for (auto& ind : timeDelayBuffer_) {
 		ind = 0.0;
 		}
@@ -19,7 +25,7 @@ bool Neuron::update(const step& t) {
 	bool hasSpike(false);
 	const step T_STOP_ = clock_ + t;
 	while (clock_ < T_STOP_) {
-		if (membrane_potential_ >= V_threshold) {
+		if (membrane_potential_ >= V_THRESHOLD) {
 			addSpikeTime(clock_);
 			hasSpike = true;	
 			isRefract_ = true;
@@ -30,6 +36,9 @@ bool Neuron::update(const step& t) {
 			size_t size(timeDelayBuffer_.size());
 			membrane_potential_ += timeDelayBuffer_[clock_%size];
 			timeDelayBuffer_[clock_%size] = 0.0;
+			/*if (poissonGenerator() == clock_) {
+				receive(J);
+			}*/
 		} else {
 			membrane_potential_ = V_RESET;
 		}
@@ -110,7 +119,10 @@ void Neuron::setMembranePotential(const double& memb) {
 
 void Neuron::setInputCurrent(const double& input) {
 	input_current_ = input;
-	assert(input_current_ == input);
+}
+
+void Neuron::setIsExcitatory(const bool& isExcitatory) {
+	isExcitatory_ = isExcitatory;
 }
 
 void Neuron::receive(const double& j) {
@@ -119,6 +131,14 @@ void Neuron::receive(const double& j) {
 
 void Neuron::receive(const double& j, const step& t) {
 	size_t size(timeDelayBuffer_.size());
-	assert(t%size < size);
-	timeDelayBuffer_[t%size] += j;
+	assert((clock_+t)%size < size);
+	timeDelayBuffer_[(clock_+t)%size] += j;
+}
+
+step Neuron::poissonGenerator() {
+	std::random_device rd;
+	std::mt19937 gen(rd());
+	std::poisson_distribution <int> p(V_EXT*C_EXCITATORY*H*J);
+	step i = p(gen);
+	return i;
 }
