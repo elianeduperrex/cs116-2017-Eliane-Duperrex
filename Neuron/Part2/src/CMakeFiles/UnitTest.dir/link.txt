@@ -1,0 +1,1 @@
+/usr/bin/c++      CMakeFiles/UnitTest.dir/test.cpp.o CMakeFiles/UnitTest.dir/neuron.cpp.o CMakeFiles/UnitTest.dir/network.cpp.o  -o UnitTest -rdynamic gtest/libgtest.a gtest/libgtest_main.a gtest/libgtest.a -pthread 

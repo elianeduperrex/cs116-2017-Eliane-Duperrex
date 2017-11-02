@@ -8,8 +8,11 @@
 \subsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\hypertarget{classNeuron_a2e40248fde544ffd0b2d93131d2d11f2}{{\bfseries Neuron} (const bool \&is\-Excitatory)}\label{classNeuron_a2e40248fde544ffd0b2d93131d2d11f2}
-
+\hyperlink{classNeuron_a823487d01615fadb8ac19a2768dd9d96}{Neuron} ()
+\item 
+\hyperlink{classNeuron_a2e40248fde544ffd0b2d93131d2d11f2}{Neuron} (const bool \&is\-Excitatory)
+\item 
+\hyperlink{classNeuron_a94a250ce7e167760e593979b899745b1}{$\sim$\-Neuron} ()
 \item 
 double \hyperlink{classNeuron_a86341dee7a81765fe4840777a008c688}{get\-Membrane\-Potential} () const 
 \item 
@@ -21,6 +24,18 @@ std\-::vector$<$ step $>$ \hyperlink{classNeuron_a35f338de50267c40039e1c38bc927a
 \item 
 bool \hyperlink{classNeuron_a598f5a1143fa5b83c9edf952d87d05c5}{get\-Refractory\-State} () const 
 \item 
+\hypertarget{classNeuron_a4b63e181e210c21a001033451a316b8c}{void {\bfseries set\-Connected\-To} (Index neuron)}\label{classNeuron_a4b63e181e210c21a001033451a316b8c}
+
+\item 
+\hypertarget{classNeuron_a8e0f567253334f3b63075f181b40f1d0}{std\-::vector$<$ Index $>$ {\bfseries get\-Connected\-To} () const }\label{classNeuron_a8e0f567253334f3b63075f181b40f1d0}
+
+\item 
+\hypertarget{classNeuron_a65f5868f9a2ddc2414a5880f28b76d4c}{bool {\bfseries is\-Excitatory} () const }\label{classNeuron_a65f5868f9a2ddc2414a5880f28b76d4c}
+
+\item 
+\hypertarget{classNeuron_aba53451b6350d647344e07967df65aeb}{void {\bfseries set\-Poisson} (int poisson)}\label{classNeuron_aba53451b6350d647344e07967df65aeb}
+
+\item 
 void \hyperlink{classNeuron_a098ab2d61d98e2288e1f42c27717f0e0}{set\-Input\-Current} (const double \&input)
 \item 
 bool \hyperlink{classNeuron_ad733fecb0aae045ce60263052eb65bb0}{update} (const step \&t)
@@ -31,7 +46,7 @@ void \hyperlink{classNeuron_adcdfedb8a0bc2fdbc4b51abb31f332ab}{receive} (const d
 \item 
 void \hyperlink{classNeuron_a9dd27e38090ecb4ea8cb964e49d98584}{add\-Spike\-Time} (const step \&t)
 \item 
-void \hyperlink{classNeuron_aafcb28b5258623282bc8372d4896e29f}{store\-Spike\-Time} (std\-::ofstream \&file) const 
+void \hyperlink{classNeuron_a09f81290a1e5a314e0de8582b8ba2e56}{store\-Spike\-Time} (std\-::ofstream \&file, Index i) const 
 \item 
 void \hyperlink{classNeuron_ad8d822198b5b577d208ddb1cb2488e27}{store\-Potential\-Membrane} (std\-::ofstream \&file) const 
 \end{DoxyCompactItemize}
@@ -39,6 +54,38 @@ void \hyperlink{classNeuron_ad8d822198b5b577d208ddb1cb2488e27}{store\-Potential\
 
 \subsection{Detailed Description}
 A neuron class 
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classNeuron_a823487d01615fadb8ac19a2768dd9d96}{\index{Neuron@{Neuron}!Neuron@{Neuron}}
+\index{Neuron@{Neuron}!Neuron@{Neuron}}
+\subsubsection[{Neuron}]{\setlength{\rightskip}{0pt plus 5cm}Neuron\-::\-Neuron (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{classNeuron_a823487d01615fadb8ac19a2768dd9d96}
+calculate the poisson equation \begin{DoxyReturn}{Returns}
+result of poisson Constructor by default initialise the different attributes with some constants provided in \hyperlink{constant_8hpp_source}{constant.\-hpp} clock -\/$>$ T\-\_\-\-S\-T\-A\-R\-T membrane potential -\/$>$ 0 input current -\/$>$ 0 is\-Excitatory -\/$>$ true is\-Refractory -\/$>$ false time\-Delay\-Buffer -\/$>$ all 0 in the array 
+\end{DoxyReturn}
+\hypertarget{classNeuron_a2e40248fde544ffd0b2d93131d2d11f2}{\index{Neuron@{Neuron}!Neuron@{Neuron}}
+\index{Neuron@{Neuron}!Neuron@{Neuron}}
+\subsubsection[{Neuron}]{\setlength{\rightskip}{0pt plus 5cm}Neuron\-::\-Neuron (
+\begin{DoxyParamCaption}
+\item[{const bool \&}]{is\-Excitatory}
+\end{DoxyParamCaption}
+)}}\label{classNeuron_a2e40248fde544ffd0b2d93131d2d11f2}
+Constructor which differences if it an excitatory or inhibitory neuron 
+\begin{DoxyParams}{Parameters}
+{\em is\-Excitatory} & \\
+\hline
+\end{DoxyParams}
+\hypertarget{classNeuron_a94a250ce7e167760e593979b899745b1}{\index{Neuron@{Neuron}!$\sim$\-Neuron@{$\sim$\-Neuron}}
+\index{$\sim$\-Neuron@{$\sim$\-Neuron}!Neuron@{Neuron}}
+\subsubsection[{$\sim$\-Neuron}]{\setlength{\rightskip}{0pt plus 5cm}Neuron\-::$\sim$\-Neuron (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{classNeuron_a94a250ce7e167760e593979b899745b1}
+Destructor by default 
 
 \subsection{Member Function Documentation}
 \hypertarget{classNeuron_a9dd27e38090ecb4ea8cb964e49d98584}{\index{Neuron@{Neuron}!add\-Spike\-Time@{add\-Spike\-Time}}
@@ -115,7 +162,7 @@ vector of the different times of the spike
 \item[{const double \&}]{j}
 \end{DoxyParamCaption}
 )}}\label{classNeuron_a7cc4e1e35efede28d44514dd02b8835b}
-neuron receive a spike from another one 
+when a neuron receive an amplitude J 
 \begin{DoxyParams}{Parameters}
 {\em amplitude} & \\
 \hline
@@ -128,7 +175,7 @@ neuron receive a spike from another one
 \item[{const step \&}]{t}
 \end{DoxyParamCaption}
 )}}\label{classNeuron_adcdfedb8a0bc2fdbc4b51abb31f332ab}
-neuron receive a spike with a delay 
+neuron receive a spike with a delay overload of the method, used in network to store the time with the delay and the particular J 
 \begin{DoxyParams}{Parameters}
 {\em amplitude} & \\
 \hline
@@ -159,13 +206,14 @@ store the membrane potential in a file
 {\em file} & where we store the data \\
 \hline
 \end{DoxyParams}
-\hypertarget{classNeuron_aafcb28b5258623282bc8372d4896e29f}{\index{Neuron@{Neuron}!store\-Spike\-Time@{store\-Spike\-Time}}
+\hypertarget{classNeuron_a09f81290a1e5a314e0de8582b8ba2e56}{\index{Neuron@{Neuron}!store\-Spike\-Time@{store\-Spike\-Time}}
 \index{store\-Spike\-Time@{store\-Spike\-Time}!Neuron@{Neuron}}
 \subsubsection[{store\-Spike\-Time}]{\setlength{\rightskip}{0pt plus 5cm}void Neuron\-::store\-Spike\-Time (
 \begin{DoxyParamCaption}
-\item[{std\-::ofstream \&}]{file}
+\item[{std\-::ofstream \&}]{file, }
+\item[{Index}]{i}
 \end{DoxyParamCaption}
-) const}}\label{classNeuron_aafcb28b5258623282bc8372d4896e29f}
+) const}}\label{classNeuron_a09f81290a1e5a314e0de8582b8ba2e56}
 store the vector times\-\_\- in a file 
 \begin{DoxyParams}{Parameters}
 {\em file} & where we store the data \\

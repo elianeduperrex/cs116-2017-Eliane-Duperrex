@@ -9,10 +9,15 @@
 
 class Neuron {
 	private :
+		/**
+		 * a private variable
+		 * */
+		double membrane_potential_; 
 		
-		double membrane_potential_; //!<membrane potential
-		
-		
+		//! a private variable
+		/*!
+		 * times when spike occured
+		 * */
 		std::vector<step> times_; //!<times when spikes occure
 		
 		step clock_; //!<specific clock for the neuron
@@ -28,19 +33,46 @@ class Neuron {
 		
 		bool isExcitatory_; //tells if a neuron is excitatory or inibitory
 		
-		//to store the time when the neuron will receive the spike from another one with each J
+		int poisson_;
+		
+		/**
+		 * to store the time when the neuron will receive the spike from another one with each J
+		 * */
 		std::array<double, BufferSize> timeDelayBuffer_;
-		//test if the neuron is refractory at time t, if so isRefract_ = true
+		/**
+		 * determine if the neuron is in refractory period at a step t
+		 * test if the neuron is refractory at time t, if so isRefract_ = true
+		 * @param step 
+		 * */
 		void isRefractory(const step& t);
-		step poissonGenerator();
+		/**
+		 * calculate the poisson equation
+		 * @return result of poisson
+		 * */
+		
 	
 	public:	
-			
+		/**
+		 * Constructor by default
+		 * initialise the different attributes with some constants provided in constant.hpp
+		 * clock -> T_START
+		 * membrane potential -> 0
+		 * input current -> 0
+		 * isExcitatory -> true
+		 * isRefractory -> false
+		 * timeDelayBuffer -> all 0 in the array
+		 * */	
 		Neuron(); 
+		/**
+		 * Constructor which differences if it an excitatory or inhibitory neuron
+		 * @param isExcitatory
+		 * */
 		Neuron(const bool& isExcitatory);
+		/**
+		 * Destructor by default
+		 * */
 		~Neuron();
 		
-		//getters
 		/**
 		 * Getter
 		 * @return membrane potential
@@ -67,6 +99,10 @@ class Neuron {
 		 * @return if the neuron is refractory
 		 * */
 		bool getRefractoryState() const;
+		void setConnectedTo(Index neuron);
+		std::vector<Index> getConnectedTo() const;
+		bool isExcitatory() const;
+		//void setPoisson(int poisson);
 		//Index getIndex() const;
 		//step getClock() const;
 	
@@ -77,23 +113,20 @@ class Neuron {
 		 * */
 		void setInputCurrent(const double& input);
 		//void setIsExcitatory(const bool& isExcitatory);
-		
-		//update the neuron
 		/**
 		 * Update
 		 * @param step
 		 * @return if spike or not
 		 * */
-		bool update(const step& t);
-		//when a neuron receive an amplitude J
+		bool update(const step& t, const int& poisson);
 		/**
-		 * neuron receive a spike from another one
+		 * when a neuron receive an amplitude J
 		 * @param amplitude
 		 * */
 		void receive(const double& j);
-		//overload of the method, used in network to store the time with the delay and the particular J
 		/**
 		 * neuron receive a spike with a delay
+		 * overload of the method, used in network to store the time with the delay and the particular J
 		 * @param amplitude
 		 * @param delay
 		 * */
@@ -105,12 +138,11 @@ class Neuron {
 		 * */
 		void addSpikeTime(const step& t); //pe mettre en time
 		 
-		//methods to store data in a file
 		/**
 		 * store the vector times_ in a file
 		 * @param file where we store the data
 		 * */
-		void storeSpikeTime(std::ofstream& file) const;
+		void storeSpikeTime(std::ofstream& file, Index i) const;
 		/**
 		 * store the membrane potential in a file
 		 * @param file where we store the data
@@ -119,7 +151,6 @@ class Neuron {
 		
 		
 };
-
 #endif
 
 

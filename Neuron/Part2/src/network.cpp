@@ -1,16 +1,32 @@
 #include "network.hpp"
-#include <vector>
 #include <cassert>
-#include <iostream>
 #include <random>
 using namespace std;
 
 Network::Network() {
 	//initialisation of the network
+	initialiseNeurons(N_EXCITATORY, N_INHIBITORY);
+	cerr << "neurons created " << '\n';
+	assert(neurons_.size() == N_TOTAL);
+	initialiseConnexion(N_EXCITATORY, N_INHIBITORY, C_EXCITATORY, C_INHIBITORY);
+	cerr << "connexion done" << '\n';
+}
+
+Network::Network(const int& excitat_numb, const int& inhibit_numb, 
+				const int& excitat_connexion, const int& inhibit_connexion) {
+	initialiseNeurons(excitat_numb, inhibit_numb);
+	assert(neurons_.size() == excitat_numb + inhibit_numb);
+	initialiseConnexion(excitat_numb, inhibit_numb, excitat_connexion, inhibit_connexion);
+	assert(connexion_.size() == excitat_numb + inhibit_numb);
+	assert(connexion_[0].size() ==inhibit_connexion + excitat_connexion);
+}
+
+void Network::initialiseNeurons(const int& excitatory_number, const int& inhibitory_number) {
 	bool isExcitatory(true);
-	for (int i(0); i < N_TOTAL; ++i) {
+	int neuron_number(excitatory_number + inhibitory_number);
+	for (int i(0); i < neuron_number; ++i) {
 		//to set 2500 neurons inibitory
-		if (i > N_EXCITATORY) {
+		if (i > excitatory_number) {
 			isExcitatory = false;
 		}
 		Neuron neur(isExcitatory);
@@ -18,30 +34,33 @@ Network::Network() {
 		assert (neuron != nullptr);
 		neurons_.push_back(neuron);
 	}
-	//connexion_.size() = (neurons_.size());
-	assert(neurons_.size() == N_TOTAL);
-	connexion_.resize(N_TOTAL);
-	//connexion_[0].resize(N_TOTAL);
-	for (int i(0); i < connexion_.size() ; ++i) {
-		connexion_[i].resize(N_TOTAL);
+}
+
+void Network::initialiseConnexion(const int& excitatory_number, 
+const int& inhibitory_number, const int& excitatory_connexion, const int& inhibitory_connexion) {
+	int total_number(excitatory_number + inhibitory_number);
+	connexion_.resize(total_number);
+	static std::random_device r;
+	static std::mt19937 generator(r());
+	int total_connexion(inhibitory_connexion + excitatory_connexion);
+	for (int i(0); i < total_number ; ++i) {
+		assert(i < connexion_.size());
 		//to do only 10% of connexion
-		for(int k(0); k < 0.1*N_TOTAL; ++k) {
-			std::random_device r;
-			std::default_random_engine generator(r());
+		for(int k(0); k < total_connexion; ++k) {			
 			int indexConnexion(0);
-			
-			if (k < 0.1*N_EXCITATORY) {	
-				uniform_int_distribution<int> distrib(0,N_EXCITATORY -1);
-				indexConnexion = distrib(generator);
+			if (k < excitatory_connexion) {	
+				uniform_int_distribution<int> distribExcit(0,excitatory_number -1);
+				indexConnexion = distribExcit(generator);
 			} else {
-				uniform_int_distribution<int> distrib(N_EXCITATORY,N_TOTAL -1);
-				indexConnexion = distrib(generator);
+				uniform_int_distribution<int> distribInhib(excitatory_number,total_number -1);
+				indexConnexion = distribInhib(generator);
 			}
-			assert(indexConnexion < connexion_[i].size());
-			connexion_[i][indexConnexion] += 1;
+			assert(i < connexion_.size());
+			connexion_[i].push_back(indexConnexion);
 		}
 	}
 }
+
 void Network::storeConnexion(ofstream& file) {
 	file << "Neurons connexions " << endl;
 	for (int i(0); i < connexion_.size(); ++i) {
@@ -51,42 +70,36 @@ void Network::storeConnexion(ofstream& file) {
 		file << endl;
 	}
 }
-Network::Network(vector<Neuron> neurons, vector<vector<Index> > connexion) {
-	assert(neurons.size() !=0);
-	for (size_t i(0); i < neurons.size(); ++i) {
-		Neuron* neuro(new Neuron (neurons[i]));
-		neurons_.push_back(neuro);
-	}
-	for (size_t i(0); i < connexion.size() ; ++i) {
-		connexion_.push_back(connexion[i]);
-		for (size_t j(0); j < connexion[i].size() ; ++j) {
-			connexion_[i][j] = (connexion[i][j]);
-		}
-	}
-}
+
 
 Network::~Network () {
-	for (size_t i(0); i < neurons_.size(); ++i) {
+	/*for (size_t i(0); i < neurons_.size(); ++i) {
 		delete neurons_[i];
-		//neurons_[i] = nullptr;
+		neurons_[i] = nullptr;
 	}
+	neurons_.clear();*/
 }
 
 void Network::update(const step& t) {
 	assert(neurons_.size() != 0);
-	bool spike(false);
 	for (size_t i(0); i < neurons_.size(); ++i) {
-		spike = false;
+		bool spike = false;
+		assert(i < neurons_.size());
 		assert(neurons_[i] != nullptr);
-		//storePotential(i, file);
-		spike = neurons_[i]->update(t);
+		double rate(V_EXT);
+		spike = neurons_[i]->update(t, poissonGenerator(rate));
 		if (spike) {
-			assert(neurons_[i] != nullptr);
 			//give the spike to the connected neurons
-			//in column are the neurons and in ligns are the receveid connexion 
-			for (size_t j(0); j < connexion_[i].size(); ++j) {
-				assert(neurons_[connexion_[j][i]] != nullptr);
-				neurons_[connexion_[j][i]]-> receive(J, DELAY);
+			//in column are the neurons and in ligns are the receveid connexion
+			double j(0.0);
+			if (neurons_[i]->isExcitatory()) {
+				j = J_EXCITATORY;
+			} else {
+				j = J_INHIBITORY;
+			} 
+			for (size_t k(0); k < connexion_[i].size(); ++k) {
+				assert(k < connexion_[i].size());				
+				neurons_[connexion_[i][k]] -> receive(j, 15);
 			}
 		}
 	}
@@ -95,21 +108,24 @@ void Network::update(const step& t) {
 void Network::storeTimeSpike(std::ofstream& file) const {
 	int i(1);
 	for (auto& neuron : neurons_) {
-		file << "Spike time of neuron " << i << " : " << endl;
-		neuron -> storeSpikeTime(file);
-		file << endl;
+		neuron -> storeSpikeTime(file, i);
 		++i;
 	}
+	
 }
-
+//plus utile
 void Network::setInputCurrentFirst(const double& input_current) {
 	neurons_[0]->setInputCurrent(input_current);
-	assert(neurons_[0]->getInputCurrent() == input_current);
 }
 
 Index Network::getNbNeurons() const {
 	return neurons_.size();
 }
+
+array<Index, 2> Network::getConnexionMatrixSize() const {
+	return {connexion_.size(), connexion_[0].size()};
+}
+
 void Network::storePotential(const Index& i, std::ofstream& file) const {
 		file << "Neuron " << i+1 << " : potential ";
 		neurons_[i]->storePotentialMembrane(file);
@@ -117,4 +133,13 @@ void Network::storePotential(const Index& i, std::ofstream& file) const {
 
 double Network::getMembranePotentialNeuron( Index i) {
 	return neurons_[i]->getMembranePotential();
+}
+
+int Network::poissonGenerator(const double& rate) {
+	int i(0);
+	static std::random_device rd;
+	static std::mt19937 gen(rd());
+	static std::poisson_distribution <> p(rate);
+	i = p(gen);
+	return i;
 }

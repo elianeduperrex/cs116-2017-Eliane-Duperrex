@@ -1,6 +1,4 @@
 var searchData=
 [
-  ['setinputcurrent',['setInputCurrent',['../classNeuron.html#a098ab2d61d98e2288e1f42c27717f0e0',1,'Neuron']]],
-  ['storepotentialmembrane',['storePotentialMembrane',['../classNeuron.html#ad8d822198b5b577d208ddb1cb2488e27',1,'Neuron']]],
-  ['storespiketime',['storeSpikeTime',['../classNeuron.html#aafcb28b5258623282bc8372d4896e29f',1,'Neuron']]]
+  ['receive',['receive',['../classNeuron.html#a7cc4e1e35efede28d44514dd02b8835b',1,'Neuron::receive(const double &amp;j)'],['../classNeuron.html#adcdfedb8a0bc2fdbc4b51abb31f332ab',1,'Neuron::receive(const double &amp;j, const step &amp;t)']]]
 ];
