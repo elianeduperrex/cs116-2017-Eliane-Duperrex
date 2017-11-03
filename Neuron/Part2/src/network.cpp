@@ -113,10 +113,6 @@ void Network::storeTimeSpike(std::ofstream& file) const {
 	}
 	
 }
-//plus utile
-void Network::setInputCurrentFirst(const double& input_current) {
-	neurons_[0]->setInputCurrent(input_current);
-}
 
 Index Network::getNbNeurons() const {
 	return neurons_.size();

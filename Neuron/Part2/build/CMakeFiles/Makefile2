@@ -88,39 +88,39 @@ clean: CMakeFiles/../bin/Neuron.dir/clean
 .PHONY : clean
 
 #=============================================================================
-# Target rules for target CMakeFiles/UnitTest.dir
+# Target rules for target CMakeFiles/../bin/UnitTest.dir
 
 # All Build rule for target.
-CMakeFiles/UnitTest.dir/all: gtest/CMakeFiles/gtest.dir/all
-CMakeFiles/UnitTest.dir/all: gtest/CMakeFiles/gtest_main.dir/all
-	$(MAKE) -f CMakeFiles/UnitTest.dir/build.make CMakeFiles/UnitTest.dir/depend
-	$(MAKE) -f CMakeFiles/UnitTest.dir/build.make CMakeFiles/UnitTest.dir/build
+CMakeFiles/../bin/UnitTest.dir/all: gtest/CMakeFiles/gtest.dir/all
+CMakeFiles/../bin/UnitTest.dir/all: gtest/CMakeFiles/gtest_main.dir/all
+	$(MAKE) -f CMakeFiles/../bin/UnitTest.dir/build.make CMakeFiles/../bin/UnitTest.dir/depend
+	$(MAKE) -f CMakeFiles/../bin/UnitTest.dir/build.make CMakeFiles/../bin/UnitTest.dir/build
 	$(CMAKE_COMMAND) -E cmake_progress_report /home/INTRANET/eduperre/myfiles/2017/cs116-2017-Eliane-Duperrex/Neuron/Part2/build/CMakeFiles  4 5 6
-	@echo "Built target UnitTest"
-.PHONY : CMakeFiles/UnitTest.dir/all
+	@echo "Built target ../bin/UnitTest"
+.PHONY : CMakeFiles/../bin/UnitTest.dir/all
 
 # Include target in all.
-all: CMakeFiles/UnitTest.dir/all
+all: CMakeFiles/../bin/UnitTest.dir/all
 .PHONY : all
 
 # Build rule for subdir invocation for target.
-CMakeFiles/UnitTest.dir/rule: cmake_check_build_system
+CMakeFiles/../bin/UnitTest.dir/rule: cmake_check_build_system
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/INTRANET/eduperre/myfiles/2017/cs116-2017-Eliane-Duperrex/Neuron/Part2/build/CMakeFiles 5
-	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/UnitTest.dir/all
+	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/../bin/UnitTest.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/INTRANET/eduperre/myfiles/2017/cs116-2017-Eliane-Duperrex/Neuron/Part2/build/CMakeFiles 0
-.PHONY : CMakeFiles/UnitTest.dir/rule
+.PHONY : CMakeFiles/../bin/UnitTest.dir/rule
 
 # Convenience name for target.
-UnitTest: CMakeFiles/UnitTest.dir/rule
-.PHONY : UnitTest
+../bin/UnitTest: CMakeFiles/../bin/UnitTest.dir/rule
+.PHONY : ../bin/UnitTest
 
 # clean rule for target.
-CMakeFiles/UnitTest.dir/clean:
-	$(MAKE) -f CMakeFiles/UnitTest.dir/build.make CMakeFiles/UnitTest.dir/clean
-.PHONY : CMakeFiles/UnitTest.dir/clean
+CMakeFiles/../bin/UnitTest.dir/clean:
+	$(MAKE) -f CMakeFiles/../bin/UnitTest.dir/build.make CMakeFiles/../bin/UnitTest.dir/clean
+.PHONY : CMakeFiles/../bin/UnitTest.dir/clean
 
 # clean rule for target.
-clean: CMakeFiles/UnitTest.dir/clean
+clean: CMakeFiles/../bin/UnitTest.dir/clean
 .PHONY : clean
 
 #=============================================================================

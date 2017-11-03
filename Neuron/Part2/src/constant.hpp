@@ -13,7 +13,7 @@ const double H = 0.1;
 ///Constants specific to the time
 //const step T_START = static_cast<unsigned long>(std::ceil(0.0/H));
 //const step T_STOP = static_cast<unsigned long>(std::ceil(150.0/H));
-const step T_START = 1000.0;
+const step T_START = 0.0;
 const step T_STOP = 4000.0;
 
 //to run the simulation faster
@@ -34,12 +34,12 @@ const double V_THRESHOLD = 20.0;
 //resset potential
 const double V_RESET = 0.0;
 //potential extern
-const double V_EXT = 0.9;
+const double V_EXT = 2.0;
 
 //amplitude between vthr and vreset in mV
 const double J_EXCITATORY = 0.1;
 const double J = 0.1;
-const double G = 4.5; 
+const double G = 5.0; 
 const double J_INHIBITORY = -G*J_EXCITATORY;
 //delay
 const double D = 1.5;

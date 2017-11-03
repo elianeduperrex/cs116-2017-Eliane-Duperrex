@@ -3,17 +3,18 @@ project (Neuron)
 
 set(CMake_CXX_FLAGS "-W -Wall -pedantic -std=c++11")
 set(CMAKE_BINARY_DIR ${CMAKE_SOURCE_DIR}/bin)
+set(gtest_SOURCE_DIR ${gtest_SOURCE_DIR}/gtest)
 add_definitions(-std=c++11)
 
 enable_testing()
 
 add_subdirectory(gtest)
 
-include_directories(${gtesst_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
+include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
 
 add_executable(../bin/Neuron neuron.cpp main.cpp network.cpp )
-add_executable(UnitTest test.cpp neuron.cpp network.cpp)
+add_executable(../bin/UnitTest test.cpp neuron.cpp network.cpp)
 
-target_link_libraries(UnitTest gtest gtest_main)
+target_link_libraries(../bin/UnitTest gtest gtest_main)
 
 add_test(UnitTest UnitTest)

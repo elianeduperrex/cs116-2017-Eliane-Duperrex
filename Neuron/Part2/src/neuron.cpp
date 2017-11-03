@@ -107,10 +107,6 @@ void Neuron::setInputCurrent(const double& input) {
 	input_current_ = input;
 }
 
-/*void Neuron::setPoisson(int poisson) {
-	poisson_ = poisson;
-}
-*/
 void Neuron::receive(const double& j) {
 	membrane_potential_ += j;
 }

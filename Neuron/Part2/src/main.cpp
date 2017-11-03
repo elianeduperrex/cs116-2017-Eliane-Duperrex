@@ -24,8 +24,8 @@ int main() {
 	double input_current_ext(0.0);
 	step a, b;
 	//file where the data would be collected
-	ofstream entree_donne("times_spike.txt");
-	ofstream conn("connexion.txt");
+	ofstream entree_donne("../res/times_spike.txt");
+	ofstream conn("../res/connexion.txt");
 
 	//ask the user to enter data for the time interval and the membrane potential
 	initialiser(a, b, input_current_ext);
@@ -37,15 +37,14 @@ int main() {
 	
 	//run simulation
 	while (simTime <= T_STOP) {
-		if (((simTime-T_START)/(double)(T_STOP-T_START)) > 0.1) {
-			cerr << " sime"  << (simTime-T_START)/(double)(T_STOP-T_START)*100 << " %" << '\n';
+		if (((simTime-T_START)/(double)(T_STOP-T_START)*0.1) > 0.1) {
+			cout << " sime"  << (simTime-T_START)/(double)(T_STOP-T_START)*100 << " %" << '\n';
 		}
 		if (simTime >= a and simTime < b) {
 			input_current = input_current_ext;
 		} else { 
 		 	input_current = 0.0;
 		}	
-		//networkNeuron.setInputCurrentFirst(input_current);
 		networkNeuron.update(N);
 		simTime += N;
 	}

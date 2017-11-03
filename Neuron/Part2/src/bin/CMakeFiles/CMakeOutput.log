@@ -1,30 +1,15 @@
 Determining if files pthread.h exist passed with the following output:
 Change Dir: /home/INTRANET/eduperre/myfiles/2017/cs116-2017-Eliane-Duperrex/Neuron/Part2/src/bin/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTryCompileExec2391190767/fast"
-/usr/bin/make -f CMakeFiles/cmTryCompileExec2391190767.dir/build.make CMakeFiles/cmTryCompileExec2391190767.dir/build
+Run Build Command:"/usr/bin/make" "cmTryCompileExec438876395/fast"
+/usr/bin/make -f CMakeFiles/cmTryCompileExec438876395.dir/build.make CMakeFiles/cmTryCompileExec438876395.dir/build
 make[1]: Entering directory `/home/INTRANET/eduperre/myfiles/2017/cs116-2017-Eliane-Duperrex/Neuron/Part2/src/bin/CMakeFiles/CMakeTmp'
 /usr/local/bin/cmake -E cmake_progress_report /home/INTRANET/eduperre/myfiles/2017/cs116-2017-Eliane-Duperrex/Neuron/Part2/src/bin/CMakeFiles/CMakeTmp/CMakeFiles 1
-Building C object CMakeFiles/cmTryCompileExec2391190767.dir/CheckIncludeFiles.c.o
-/usr/bin/cc    -o CMakeFiles/cmTryCompileExec2391190767.dir/CheckIncludeFiles.c.o   -c /home/INTRANET/eduperre/myfiles/2017/cs116-2017-Eliane-Duperrex/Neuron/Part2/src/bin/CMakeFiles/CMakeTmp/CheckIncludeFiles.c
-Linking C executable cmTryCompileExec2391190767
-/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec2391190767.dir/link.txt --verbose=1
-/usr/bin/cc       CMakeFiles/cmTryCompileExec2391190767.dir/CheckIncludeFiles.c.o  -o cmTryCompileExec2391190767 -rdynamic 
-make[1]: Leaving directory `/home/INTRANET/eduperre/myfiles/2017/cs116-2017-Eliane-Duperrex/Neuron/Part2/src/bin/CMakeFiles/CMakeTmp'
-
-
-Determining if files pthread.h exist passed with the following output:
-Change Dir: /home/INTRANET/eduperre/myfiles/2017/cs116-2017-Eliane-Duperrex/Neuron/Part2/src/bin/CMakeFiles/CMakeTmp
-
-Run Build Command:"/usr/bin/make" "cmTryCompileExec571921279/fast"
-/usr/bin/make -f CMakeFiles/cmTryCompileExec571921279.dir/build.make CMakeFiles/cmTryCompileExec571921279.dir/build
-make[1]: Entering directory `/home/INTRANET/eduperre/myfiles/2017/cs116-2017-Eliane-Duperrex/Neuron/Part2/src/bin/CMakeFiles/CMakeTmp'
-/usr/local/bin/cmake -E cmake_progress_report /home/INTRANET/eduperre/myfiles/2017/cs116-2017-Eliane-Duperrex/Neuron/Part2/src/bin/CMakeFiles/CMakeTmp/CMakeFiles 1
-Building C object CMakeFiles/cmTryCompileExec571921279.dir/CheckIncludeFiles.c.o
-/usr/bin/cc    -o CMakeFiles/cmTryCompileExec571921279.dir/CheckIncludeFiles.c.o   -c /home/INTRANET/eduperre/myfiles/2017/cs116-2017-Eliane-Duperrex/Neuron/Part2/src/bin/CMakeFiles/CMakeTmp/CheckIncludeFiles.c
-Linking C executable cmTryCompileExec571921279
-/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec571921279.dir/link.txt --verbose=1
-/usr/bin/cc       CMakeFiles/cmTryCompileExec571921279.dir/CheckIncludeFiles.c.o  -o cmTryCompileExec571921279 -rdynamic 
+Building C object CMakeFiles/cmTryCompileExec438876395.dir/CheckIncludeFiles.c.o
+/usr/bin/cc    -o CMakeFiles/cmTryCompileExec438876395.dir/CheckIncludeFiles.c.o   -c /home/INTRANET/eduperre/myfiles/2017/cs116-2017-Eliane-Duperrex/Neuron/Part2/src/bin/CMakeFiles/CMakeTmp/CheckIncludeFiles.c
+Linking C executable cmTryCompileExec438876395
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec438876395.dir/link.txt --verbose=1
+/usr/bin/cc       CMakeFiles/cmTryCompileExec438876395.dir/CheckIncludeFiles.c.o  -o cmTryCompileExec438876395 -rdynamic 
 make[1]: Leaving directory `/home/INTRANET/eduperre/myfiles/2017/cs116-2017-Eliane-Duperrex/Neuron/Part2/src/bin/CMakeFiles/CMakeTmp'
 
 

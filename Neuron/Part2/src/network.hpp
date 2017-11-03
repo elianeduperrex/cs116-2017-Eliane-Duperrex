@@ -26,9 +26,6 @@ class Network {
 		 * Destructor which delete the vector of pointers on neurons
 		 * */
 		~Network();
-
-		void setInputCurrentFirst(const double& input_current);
-		
 		/**
 		 * GETTER
 		 * @return total number of neuron
@@ -66,8 +63,7 @@ class Network {
 		private :
 	
 		vector<Neuron*> neurons_; ///<neurons in the network
-		vector<vector<Index> > connexion_;
-		//array<array<Index,C_EXCITATORY+C_INHIBITORY>, N_TOTAL> connexion_; ///< connexions between the neurons
+		vector<vector<Index> > connexion_; ///< connexions between the neurons
 		int poissonGenerator(const double& rate);
 		void initialiseNeurons(const int& excitatory_number, const int& inhibitory_number);
 		void initialiseConnexion(const int& excitatory_number, const int& inhibitory_number, 
