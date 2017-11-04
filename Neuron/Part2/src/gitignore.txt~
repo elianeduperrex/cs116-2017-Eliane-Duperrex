@@ -1,9 +1,0 @@
-*
-!.gitignore
-!*.h*
-!*.c*
-
-!latex*
-!html*
-!CMakeLists.txt
-
