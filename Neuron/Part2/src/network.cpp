@@ -4,12 +4,10 @@
 using namespace std;
 
 Network::Network() {
-	//initialisation of the network
+	///initialisation of the network
 	initialiseNeurons(N_EXCITATORY, N_INHIBITORY);
-	cerr << "neurons created " << '\n';
 	assert(neurons_.size() == N_TOTAL);
 	initialiseConnexion(N_EXCITATORY, N_INHIBITORY, C_EXCITATORY, C_INHIBITORY);
-	cerr << "connexion done" << '\n';
 }
 
 Network::Network(const int& excitat_numb, const int& inhibit_numb, 
@@ -36,16 +34,21 @@ void Network::initialiseNeurons(const int& excitatory_number, const int& inhibit
 	}
 }
 
-void Network::initialiseConnexion(const int& excitatory_number, 
-const int& inhibitory_number, const int& excitatory_connexion, const int& inhibitory_connexion) {
+void Network::initialiseConnexion	(const int& excitatory_number, 
+									const int& inhibitory_number, 
+									const int& excitatory_connexion, 
+									const int& inhibitory_connexion) 
+{	
 	int total_number(excitatory_number + inhibitory_number);
+	int total_connexion(inhibitory_connexion + excitatory_connexion);
+	//set the size to the total number of neurons
 	connexion_.resize(total_number);
+	
 	static std::random_device r;
 	static std::mt19937 generator(r());
-	int total_connexion(inhibitory_connexion + excitatory_connexion);
+	
 	for (int i(0); i < total_number ; ++i) {
 		assert(i < connexion_.size());
-		//to do only 10% of connexion
 		for(int k(0); k < total_connexion; ++k) {			
 			int indexConnexion(0);
 			if (k < excitatory_connexion) {	
@@ -61,7 +64,7 @@ const int& inhibitory_number, const int& excitatory_connexion, const int& inhibi
 	}
 }
 
-void Network::storeConnexion(ofstream& file) {
+void Network::storeConnexion(ofstream& file) const {
 	file << "Neurons connexions " << endl;
 	for (int i(0); i < connexion_.size(); ++i) {
 		for (int j(0); j < connexion_[i].size(); ++j) {
@@ -73,11 +76,11 @@ void Network::storeConnexion(ofstream& file) {
 
 
 Network::~Network () {
-	/*for (size_t i(0); i < neurons_.size(); ++i) {
+	for (size_t i(0); i < neurons_.size(); ++i) {
 		delete neurons_[i];
 		neurons_[i] = nullptr;
 	}
-	neurons_.clear();*/
+	neurons_.clear();
 }
 
 void Network::update(const step& t) {
@@ -86,7 +89,7 @@ void Network::update(const step& t) {
 		bool spike = false;
 		assert(i < neurons_.size());
 		assert(neurons_[i] != nullptr);
-		double rate(V_EXT);
+		double rate(MU_EXT);
 		spike = neurons_[i]->update(t, poissonGenerator(rate));
 		if (spike) {
 			//give the spike to the connected neurons
@@ -99,7 +102,7 @@ void Network::update(const step& t) {
 			} 
 			for (size_t k(0); k < connexion_[i].size(); ++k) {
 				assert(k < connexion_[i].size());				
-				neurons_[connexion_[i][k]] -> receive(j, 15);
+				neurons_[connexion_[i][k]] -> receive(j, DELAY);
 			}
 		}
 	}
@@ -110,8 +113,7 @@ void Network::storeTimeSpike(std::ofstream& file) const {
 	for (auto& neuron : neurons_) {
 		neuron -> storeSpikeTime(file, i);
 		++i;
-	}
-	
+	}	
 }
 
 Index Network::getNbNeurons() const {
@@ -127,7 +129,7 @@ void Network::storePotential(const Index& i, std::ofstream& file) const {
 		neurons_[i]->storePotentialMembrane(file);
 }
 
-double Network::getMembranePotentialNeuron( Index i) {
+double Network::getMembranePotentialNeuron(Index i) const {
 	return neurons_[i]->getMembranePotential();
 }
 

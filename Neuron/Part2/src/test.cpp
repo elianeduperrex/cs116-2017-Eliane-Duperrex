@@ -11,7 +11,7 @@ TEST (NeuronTest, MembranePotential) {
 	EXPECT_NEAR(20.0*(1.0-std::exp(-0.1/20.0)), neuron1.getMembranePotential(), 10e-5);
 	neuron1.update(10000, 0);
 	EXPECT_GT(10e-3, std::fabs(19.999 - neuron1.getMembranePotential()));
-	EXPECT_EQ(0, neuron1.getTimeSize());
+	EXPECT_EQ(0, neuron1.getSpikeTimeSize());
 	
 	neuron2.setInputCurrent(0.0);
 	neuron2.update(1, 0);
@@ -32,12 +32,12 @@ TEST (NeuronTest, SpikeTime) {
 	Neuron neuron2;
 	neuron2.setInputCurrent(1.01);
 	neuron2.update(924, 0);
-	EXPECT_EQ(0, neuron2.getTimeSize());
+	EXPECT_EQ(0, neuron2.getSpikeTimeSize());
 	neuron2.update(1, 0);
-	EXPECT_EQ(1, neuron2.getTimeSize());
+	EXPECT_EQ(1, neuron2.getSpikeTimeSize());
 	EXPECT_EQ(0.0, neuron2.getMembranePotential());
 	neuron2.update(1868, 0);
-	EXPECT_EQ(2, neuron2.getTimeSize());
+	EXPECT_EQ(2, neuron2.getSpikeTimeSize());
 }
 
 TEST(NeuronTest, Connexion) {
@@ -54,6 +54,14 @@ TEST(NeuronTest, Connexion) {
 	 }
 	 
 	EXPECT_EQ(0.1, neuron2.getMembranePotential());
+	
+	Neuron neur;
+	step time(1000);
+	neur.receive(0.1, 0);
+	//creation of a neuron and give it that a neuron connected to it spiked
+	//at initialisation the membrane potential is at 0.0 -> the potential varies only with J 
+	neur.update(1, 0);
+	EXPECT_EQ(neur.getMembranePotential(), 0.1);
 }
 
 TEST(NetworkTests, neurons) {
@@ -67,9 +75,9 @@ TEST(NetworkTests, neurons) {
 TEST(NetworkTest, Initialisation) {
 	 Network networkNeurons;
 	 EXPECT_EQ(12500, networkNeurons.getNbNeurons());
-	/* array<size_t, 2> matrixSize(networkNeurons.getConnexionMatrixSize());
+	 array<size_t, 2> matrixSize(networkNeurons.getConnexionMatrixSize());
 	 EXPECT_EQ(12500, matrixSize[0]);
-	 EXPECT_EQ(1250, matrixSize[1]);*/
+	 EXPECT_EQ(1250, matrixSize[1]);
 }
 int main(int argc, char **argv) {
 	::testing::InitGoogleTest(&argc, argv);

@@ -3,12 +3,14 @@ project (Neuron)
 
 set(CMake_CXX_FLAGS "-W -Wall -pedantic -std=c++11")
 set(CMAKE_BINARY_DIR ${CMAKE_SOURCE_DIR}/bin)
-set(gtest_SOURCE_DIR ${gtest_SOURCE_DIR}/gtest)
+set(PROJECT_BINARY_DIR ${CMAKE_SOURCE_DIR}/build)
+set(CMAKE_CURRENT_BINARY_DIR $../build)
+set(gtest_SOURCE_DIR $../doc)
 add_definitions(-std=c++11)
 
 enable_testing()
 
-add_subdirectory(gtest)
+#add_subdirectory(gtest)
 
 include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
 

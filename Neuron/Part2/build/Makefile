@@ -137,32 +137,6 @@ depend:
 	$(MAKE) -f CMakeFiles/../bin/UnitTest.dir/build.make CMakeFiles/../bin/UnitTest.dir/build
 .PHONY : ../bin/UnitTest/fast
 
-#=============================================================================
-# Target rules for targets named gtest
-
-# Build rule for target.
-gtest: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 gtest
-.PHONY : gtest
-
-# fast build rule for target.
-gtest/fast:
-	$(MAKE) -f gtest/CMakeFiles/gtest.dir/build.make gtest/CMakeFiles/gtest.dir/build
-.PHONY : gtest/fast
-
-#=============================================================================
-# Target rules for targets named gtest_main
-
-# Build rule for target.
-gtest_main: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 gtest_main
-.PHONY : gtest_main
-
-# fast build rule for target.
-gtest_main/fast:
-	$(MAKE) -f gtest/CMakeFiles/gtest_main.dir/build.make gtest/CMakeFiles/gtest_main.dir/build
-.PHONY : gtest_main/fast
-
 main.o: main.cpp.o
 .PHONY : main.o
 
@@ -276,8 +250,6 @@ help:
 	@echo "... ../bin/UnitTest"
 	@echo "... ../bin/Neuron"
 	@echo "... test"
-	@echo "... gtest"
-	@echo "... gtest_main"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"

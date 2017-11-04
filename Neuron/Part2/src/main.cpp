@@ -1,22 +1,14 @@
 #include <iostream>
-
 #include <fstream>
-#include <cassert>
 #include <time.h>
-#include "neuron.hpp"
+#include <cassert>
 #include "constant.hpp"
 #include "network.hpp"
 
 using namespace std;
-//test the connexion between 2 neurons
-bool testConnexion();
-//test the connexion with buffer
-bool testBuffer();
-//run the test
-void runTest();
+
 //initialise the time interval and the external input current
 void initialiser(step& a, step& b, double& current);
-
 
 int main() {
 	clock_t begin = clock();
@@ -24,39 +16,39 @@ int main() {
 	double input_current_ext(0.0);
 	step a, b;
 	//file where the data would be collected
-	ofstream entree_donne("../res/times_spike.txt");
-	ofstream conn("../res/connexion.txt");
+	ofstream timeSpike("../res/times_spike.txt");
+	ofstream connexion_stored("../res/connexion.txt");
 
 	//ask the user to enter data for the time interval and the membrane potential
 	initialiser(a, b, input_current_ext);
-
 	
 	Network networkNeuron;
 	cerr << "Network created " << '\n';
-	double input_current(0.0);
-	
-	//run simulation
+	double current_ext(0.0);
+	double counter(0.0);
+	///run simulation
 	while (simTime <= T_STOP) {
-		if (((simTime-T_START)/(double)(T_STOP-T_START)*0.1) > 0.1) {
-			cout << " sime"  << (simTime-T_START)/(double)(T_STOP-T_START)*100 << " %" << '\n';
+		///counter to see the percentage of the simulation
+		if (((simTime-T_START)/(double)(T_STOP-T_START))-counter >= 0.0) {
+			counter += 0.1;
+			cout << "Simulation "  << (simTime-T_START)/(double)(T_STOP-T_START)*100 << " %" << '\n';
 		}
 		if (simTime >= a and simTime < b) {
-			input_current = input_current_ext;
+			current_ext = input_current_ext;
 		} else { 
-		 	input_current = 0.0;
+		 	current_ext = 0.0;
 		}	
 		networkNeuron.update(N);
 		simTime += N;
 	}
-	//to store the spike times
-	networkNeuron.storeTimeSpike(entree_donne);
-	//networkNeuron.storeConnexion(conn);
-	entree_donne.close();
-	conn.close();
-	runTest();
+	///to store the spike times
+	networkNeuron.storeTimeSpike(timeSpike);
+	networkNeuron.storeConnexion(connexion_stored);
+	timeSpike.close();
+	connexion_stored.close();
 	clock_t end = clock();
 	double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
-	cout << "Time " << time_spent << endl;
+	cout << "Time of the simulation " << time_spent << endl;
 	return 0;
 }
 
@@ -64,60 +56,43 @@ void initialiser(step& a, step& b, double& input_current_ext) {
 	cout << "Choose an external current: ";
 	cin >> input_current_ext;
 	double s(0.0), t(0.0);
-	do {	
 		cout << "Choose a time interval: (a < b), a and b must be positive numbers ";
-		cin >> s;
-		cin >> t;
+	do {
+		do {
+			cout << "Choose a : ";
+			cin >> s;
+			while (cin.fail()) {
+				cerr << "The character you entered is not a number" << '\n';
+				cout << "Please enter once more ";
+				cin.clear();
+				cin.ignore(256, '\n');
+				cin >> s;
+			}
+			if (s < 0.0) {
+				cerr << "Your number should be positive " << endl;
+				cerr << "Please try it again " << endl;
+			}
+		} while (s < 0.0);
 		
-	} while (s >= t or s < 0.0 or t < 0.0) ;
-	a=s/H;
-	b=t/H;
-	cout << "[a,b] = [" << s << ", " << t << "]" << endl;
-}
-
-bool testConnexion () {
-	Neuron neur;
-	bool result(false);
-	/*step time(T_START);
-	neur.receive(J, time);
-	//creation of a neuron and give it that a neuron connected to it spiked
-	//at initialisation the membrane potential is at 0.0 -> the potential varies only with J 
-	neur.update(N);
-	if (neur.getMembranePotential() == J) {
-		result  = true;
-	}*/
-	return result;
-}
-
-bool testBuffer() {
-	bool result(false);
-	//V change with D
-	/*/Neuron neuron1;
-	step t(T_START);
-	neuron1.receive(J, t + DELAY);
-	for (int i(0); i <= DELAY; ++i) {
-		neuron1.update(N);
-	}	
-	
-	if (neuron1.getMembranePotential() == J) {
-		result = true;
-	}	*/
-	return result;
-}
-
-void runTest() {
-	cout << "Connexion test is";
-	if (testConnexion()) {
-			cout << " passed ";
-		} else {
-			cout << " failed ";
-	}	
-	cout << endl;
-	cout << "Buffer test is";
-	if (testBuffer()) {
-			cout << " passed ";
-		} else {
-			cout << " failed ";
-	}	
-	cout << endl;
+		cout << "Choose b : ";
+		cin >> t;
+		while (cin.fail()) {
+			cerr << "The character you entered is not a number" << '\n';
+			cout << "Please enter once more ";
+			cin.clear();
+			cin.ignore(256, '\n');
+			cin >> t;
+		}
+		if (t < 0.0) {
+			cerr << "Your number should be positive" << endl;
+			cerr << "Please try it again" << endl;
+		}
+		if (t < s) {
+			cerr << "The end of the interval should be bigger than the start" << endl;
+			cerr << "Try it again" << endl;
+		}	
+		a=s/H;
+		b=t/H;
+		cout << "[a,b] = [" << s << ", " << t << "]" << endl;
+	} while (t < 0.0 or (s > t));
 }
