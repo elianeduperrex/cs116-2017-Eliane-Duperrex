@@ -1,10 +1,11 @@
 #include "network.hpp"
 #include <cassert>
 #include <random>
+#include <iostream>
 using namespace std;
 
 Network::Network() {
-	///initialisation of the network
+	//initialisation of the network
 	initialiseNeurons(N_EXCITATORY, N_INHIBITORY);
 	assert(neurons_.size() == N_TOTAL);
 	initialiseConnexion(N_EXCITATORY, N_INHIBITORY, C_EXCITATORY, C_INHIBITORY);
@@ -65,13 +66,17 @@ void Network::initialiseConnexion	(const int& excitatory_number,
 }
 
 void Network::storeConnexion(ofstream& file) const {
-	file << "Neurons connexions " << endl;
-	for (int i(0); i < connexion_.size(); ++i) {
-		for (int j(0); j < connexion_[i].size(); ++j) {
-			file << connexion_[i][j] << " ";
+	if (file.fail()) {
+			std::cerr << "Error ";
+		} else {
+			file << "Neurons connexions " << endl;
+			for (int i(0); i < connexion_.size(); ++i) {
+				for (int j(0); j < connexion_[i].size(); ++j) {
+					file << connexion_[i][j] << " ";
+				}
+				file << endl;
+			}
 		}
-		file << endl;
-	}
 }
 
 

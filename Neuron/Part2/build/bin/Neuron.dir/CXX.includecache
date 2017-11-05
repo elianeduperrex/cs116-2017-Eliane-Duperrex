@@ -15,8 +15,6 @@ fstream
 -
 time.h
 -
-cassert
--
 constant.hpp
 /home/INTRANET/eduperre/myfiles/2017/cs116-2017-Eliane-Duperrex/Neuron/Part2/src/constant.hpp
 network.hpp
@@ -29,11 +27,11 @@ cassert
 -
 random
 -
+iostream
+-
 
 /home/INTRANET/eduperre/myfiles/2017/cs116-2017-Eliane-Duperrex/Neuron/Part2/src/network.hpp
 vector
--
-iostream
 -
 neuron.hpp
 /home/INTRANET/eduperre/myfiles/2017/cs116-2017-Eliane-Duperrex/Neuron/Part2/src/neuron.hpp
@@ -45,11 +43,9 @@ array
 /home/INTRANET/eduperre/myfiles/2017/cs116-2017-Eliane-Duperrex/Neuron/Part2/src/neuron.cpp
 neuron.hpp
 /home/INTRANET/eduperre/myfiles/2017/cs116-2017-Eliane-Duperrex/Neuron/Part2/src/neuron.hpp
-iostream
--
 cassert
 -
-random
+iostream
 -
 
 /home/INTRANET/eduperre/myfiles/2017/cs116-2017-Eliane-Duperrex/Neuron/Part2/src/neuron.hpp

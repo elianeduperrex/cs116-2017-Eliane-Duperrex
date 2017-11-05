@@ -1,62 +1,47 @@
 #include <iostream>
 #include <fstream>
 #include <time.h>
-#include <cassert>
 #include "constant.hpp"
 #include "network.hpp"
-
 using namespace std;
 
-//initialise the time interval and the external input current
-void initialiser(step& a, step& b, double& current);
+///initialise the time interval and the external input current
+void initialiser(step& a, step& b);
 
 int main() {
 	clock_t begin = clock();
-	step simTime(T_START);
-	double input_current_ext(0.0);
-	step a, b;
-	//file where the data would be collected
+	step simTime, t_stop, t_start;
+	///file where the data would be collected
 	ofstream timeSpike("../res/times_spike.txt");
-	ofstream connexion_stored("../res/connexion.txt");
-
-	//ask the user to enter data for the time interval and the membrane potential
-	initialiser(a, b, input_current_ext);
-	
+	///ask the user to enter data for the time interval and the membrane potential
+	initialiser(t_start, t_stop);
+	simTime = t_start;
 	Network networkNeuron;
-	cerr << "Network created " << '\n';
+	cout << "Network created " << '\n';
 	double current_ext(0.0);
 	double counter(0.0);
 	///run simulation
-	while (simTime <= T_STOP) {
-		///counter to see the percentage of the simulation
-		if (((simTime-T_START)/(double)(T_STOP-T_START))-counter >= 0.0) {
+	while (simTime <= t_stop) {
+		///there is a counter to see the percentage of the simulation
+		if (((simTime-t_start)/(double)(t_stop - t_start))-counter >= 0.0) {
 			counter += 0.1;
-			cout << "Simulation "  << (simTime-T_START)/(double)(T_STOP-T_START)*100 << " %" << '\n';
+			cout << "Simulation percentage done: "  << (simTime - t_start)/(double)(t_stop - t_start)*100 << " %" << '\n';
 		}
-		if (simTime >= a and simTime < b) {
-			current_ext = input_current_ext;
-		} else { 
-		 	current_ext = 0.0;
-		}	
 		networkNeuron.update(N);
 		simTime += N;
 	}
-	///to store the spike times
+	///store the spike times
 	networkNeuron.storeTimeSpike(timeSpike);
-	networkNeuron.storeConnexion(connexion_stored);
 	timeSpike.close();
-	connexion_stored.close();
 	clock_t end = clock();
 	double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
 	cout << "Time of the simulation " << time_spent << endl;
 	return 0;
 }
 
-void initialiser(step& a, step& b, double& input_current_ext) {
-	cout << "Choose an external current: ";
-	cin >> input_current_ext;
+void initialiser(step& a, step& b) {
 	double s(0.0), t(0.0);
-		cout << "Choose a time interval: (a < b), a and b must be positive numbers ";
+		cout << "Choose a time interval for the simulation: (a < b), a and b must be positive numbers ";
 	do {
 		do {
 			cout << "Choose a : ";

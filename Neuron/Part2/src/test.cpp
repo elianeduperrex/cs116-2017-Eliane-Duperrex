@@ -1,9 +1,9 @@
-#include <iostream>
 #include "network.hpp"
 #include "neuron.hpp"
 #include <cmath>
 #include "gtest/gtest.h"
 
+///test the membrane potential
 TEST (NeuronTest, MembranePotential) {
 	Neuron neuron1, neuron2;
 	neuron1.setInputCurrent(1.0);
@@ -16,18 +16,17 @@ TEST (NeuronTest, MembranePotential) {
 	neuron2.setInputCurrent(0.0);
 	neuron2.update(1, 0);
 	EXPECT_EQ(0.0, neuron2.getMembranePotential());
-	
 }
-
+///test if the spikes occure at correct time
 TEST (NeuronTest, SpikeTime) {
 	Neuron neuron;
 	neuron.setInputCurrent(1.01);
 	for (int i(1000); i < 4000; ++i) {
 		neuron.update(1, 0);
 	}
-	EXPECT_NEAR(192.4, neuron.getTimeSpike(0)*0.1, 10e-2);
-	EXPECT_NEAR(286.8, neuron.getTimeSpike(1)*0.1, 10e-2);
-	EXPECT_NEAR(381.2, neuron.getTimeSpike(2)*0.1, 10e-2);
+	EXPECT_NEAR(92.4, neuron.getTimeSpike(0)*0.1, 10e-2);
+	EXPECT_NEAR(186.8, neuron.getTimeSpike(1)*0.1, 10e-2);
+	EXPECT_NEAR(281.2, neuron.getTimeSpike(2)*0.1, 10e-2);
 	
 	Neuron neuron2;
 	neuron2.setInputCurrent(1.01);
@@ -39,7 +38,7 @@ TEST (NeuronTest, SpikeTime) {
 	neuron2.update(1868, 0);
 	EXPECT_EQ(2, neuron2.getSpikeTimeSize());
 }
-
+///test the connexion between two neurons with a delay
 TEST(NeuronTest, Connexion) {
 	Neuron neuron1, neuron2;
 	int delay(15);
@@ -58,20 +57,12 @@ TEST(NeuronTest, Connexion) {
 	Neuron neur;
 	step time(1000);
 	neur.receive(0.1, 0);
-	//creation of a neuron and give it that a neuron connected to it spiked
-	//at initialisation the membrane potential is at 0.0 -> the potential varies only with J 
+	///creation of a neuron and give it that a neuron connected to it spiked
+	///at initialisation the membrane potential is at 0.0 -> the potential varies only with J 
 	neur.update(1, 0);
 	EXPECT_EQ(neur.getMembranePotential(), 0.1);
 }
-
-TEST(NetworkTests, neurons) {
-	Network network(40, 10, 4, 1);
-	int delay(15);
-	for(int i(0); i < 925+delay ; ++i) {
-		network.update(1);
-	 }
-	//EXPECT_EQ(0.1, network.getMembranePotentialNeuron(1));
-} 
+///test the initialisation of the network
 TEST(NetworkTest, Initialisation) {
 	 Network networkNeurons;
 	 EXPECT_EQ(12500, networkNeurons.getNbNeurons());
@@ -79,6 +70,7 @@ TEST(NetworkTest, Initialisation) {
 	 EXPECT_EQ(12500, matrixSize[0]);
 	 EXPECT_EQ(1250, matrixSize[1]);
 }
+
 int main(int argc, char **argv) {
 	::testing::InitGoogleTest(&argc, argv);
 	return RUN_ALL_TESTS();

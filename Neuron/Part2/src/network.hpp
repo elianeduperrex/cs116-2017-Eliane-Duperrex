@@ -2,7 +2,6 @@
 #ifndef NETWORK_HPP
 #define NETWORK_HPP
 #include <vector>
-#include <iostream>
 #include "neuron.hpp"
 #include "constant.hpp"
 #include <array>
@@ -50,7 +49,14 @@ class Network {
 									const int& inhibitory_number, 
 									const int& excitatory_connexion, 
 									const int& inhibitory_connexion);
-	public :
+	
+		const int N_EXCITATORY = 10000; //!<number of excitatory neuron
+		const int N_INHIBITORY = 2500; //!<number of inhibitory neuron
+		const int N_TOTAL = N_EXCITATORY + N_INHIBITORY; //!<total number
+		const int C_EXCITATORY = 0.1*N_EXCITATORY; //!<number of excitatory connexion (10%)
+		const int C_INHIBITORY = 0.1*N_INHIBITORY; //!<number of inhibitory connexion (10%)
+		const int C_TOTAL = C_EXCITATORY + C_INHIBITORY; //!<total number of connexion
+	public:
 		/**
 		 * Constructor by default
 		 * @see initialiseConnexion 

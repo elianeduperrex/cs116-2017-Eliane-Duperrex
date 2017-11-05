@@ -9,7 +9,16 @@
 
 class Neuron {
 	private :
-	
+		static constexpr Index BufferSize = ((D/H)+1); ///size buffer
+		static constexpr double TAU = 20.0; //!<time constant
+		static constexpr step TAU_REFRACTORY = 2.0/H; //!<time constant in which the neuron is refractory		
+		static constexpr double C = 1.0; //!<capacity of the membrane		
+		static constexpr double R = (TAU/C); //!<membrane resistance		
+		static constexpr double V_THRESHOLD = 20.0; //!<potential threshold		
+		static constexpr double V_RESET = 0.0; //!<resset potential
+		static constexpr double C1 = exp(-H/TAU); //!< for ODE equation
+		static constexpr double C2 = R*(1-exp(-H/TAU)); //!< for ODE equation
+		
 		double membrane_potential_; //!<membrane potential of the neuron
 		
 		std::vector<step> spikes_time_; //!<times when spikes occure
@@ -38,22 +47,14 @@ class Neuron {
 		 * */
 		void addSpikeTime(const step& time);
 	public:	
-		static constexpr double TAU = 20.0; //!<time constant
-		static constexpr step TAU_REFRACTORY = 2.0/H; //!<time constant in which the neuron is refractory		
-		static constexpr double C = 1.0; //!<capacity of the membrane		
-		static constexpr double R = (TAU/C); //!<membrane resistance		
-		static constexpr double V_THRESHOLD = 20.0; //!<potential threshold		
-		static constexpr double V_RESET = 0.0; //!<resset potential
-		static constexpr double C1 = exp(-H/TAU); //!< for ODE equation
-		static constexpr double C2 = R*(1-exp(-H/TAU)); //!< for ODE equation
 		/**
-		 * initialise the different attributes with some constants provided in constant.hpp
-		 * clock -> T_START
-		 * membrane potential -> 0
-		 * input current -> 0
-		 * isExcitatory -> true
-		 * isRefractory -> false 
-		 * timeDelayBuffer -> all 0 in the array
+		 * initialise the different attributes with some constants provided in constant.hpp '\n'
+		 * clock -> 0 '\n'
+		 * membrane potential -> 0 '\n'
+		 * input current -> 0 '\n'
+		 * isExcitatory -> true '\n'
+		 * isRefractory -> false '\n'
+		 * timeDelayBuffer -> all 0 in the array '\n'
 		 * when there hasn't been any spike, the neuron cannot be refractory
 		 * */	
 		Neuron(); //!<Contructor by default

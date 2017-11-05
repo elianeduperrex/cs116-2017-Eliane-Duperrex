@@ -137,6 +137,19 @@ depend:
 	$(MAKE) -f CMakeFiles/../bin/UnitTest.dir/build.make CMakeFiles/../bin/UnitTest.dir/build
 .PHONY : ../bin/UnitTest/fast
 
+#=============================================================================
+# Target rules for targets named doc
+
+# Build rule for target.
+doc: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 doc
+.PHONY : doc
+
+# fast build rule for target.
+doc/fast:
+	$(MAKE) -f CMakeFiles/doc.dir/build.make CMakeFiles/doc.dir/build
+.PHONY : doc/fast
+
 main.o: main.cpp.o
 .PHONY : main.o
 
@@ -247,6 +260,7 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
+	@echo "... doc"
 	@echo "... ../bin/UnitTest"
 	@echo "... ../bin/Neuron"
 	@echo "... test"

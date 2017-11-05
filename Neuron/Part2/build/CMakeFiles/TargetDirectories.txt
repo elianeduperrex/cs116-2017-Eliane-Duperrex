@@ -1,2 +1,3 @@
+/home/INTRANET/eduperre/myfiles/2017/cs116-2017-Eliane-Duperrex/Neuron/Part2/build/CMakeFiles/doc.dir
 /home/INTRANET/eduperre/myfiles/2017/cs116-2017-Eliane-Duperrex/Neuron/Part2/build/CMakeFiles/../bin/UnitTest.dir
 /home/INTRANET/eduperre/myfiles/2017/cs116-2017-Eliane-Duperrex/Neuron/Part2/build/CMakeFiles/../bin/Neuron.dir

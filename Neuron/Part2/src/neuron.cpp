@@ -1,16 +1,13 @@
 #include "neuron.hpp"
-#include <iostream>
 #include <cassert>
-#include <random>
-
-
-Neuron::Neuron() : 	membrane_potential_(0.0), clock_(T_START), 
+#include <iostream>
+Neuron::Neuron() : 	membrane_potential_(0.0), clock_(0), 
 					isRefract_(false), input_current_(0.0), isExcitatory_(true) {
 	for (auto& ind : timeDelayBuffer_) {
 		ind = 0.0;
 		}
 }
-Neuron::Neuron(const bool& isExcitatory) : 	membrane_potential_(0.0), clock_(T_START), 
+Neuron::Neuron(const bool& isExcitatory) : 	membrane_potential_(0.0), clock_(0), 
 					isRefract_(false), input_current_(0.0), isExcitatory_(isExcitatory) {
 	for (auto& ind : timeDelayBuffer_) {
 		ind = 0.0;
@@ -23,6 +20,7 @@ Neuron::~Neuron() {}
 bool Neuron::update(const step& t, const int& poisson) {
 	bool hasSpike(false);
 	const step T_STOP_ = clock_ + t;
+	
 	while (clock_ < T_STOP_) {
 		
 		if (membrane_potential_ >= V_THRESHOLD) {
@@ -34,7 +32,7 @@ bool Neuron::update(const step& t, const int& poisson) {
 		if (!isRefract_) {
 			size_t size(timeDelayBuffer_.size());
 			membrane_potential_ =	C1*membrane_potential_ + input_current_*C2 
-									+ timeDelayBuffer_[clock_%size] + poisson*J;
+									+ timeDelayBuffer_[clock_%size] + poisson*J_EXT;
 			timeDelayBuffer_[clock_%size] = 0.0;
 		
 		} else {
