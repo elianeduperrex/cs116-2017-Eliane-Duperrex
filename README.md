@@ -21,5 +21,5 @@ How to run the program:
 - update the network with the constants
 - store the data in a file
 - you can generate the graph if from the repository 'src', you run with python the file spike_graph.py
-- you can generate doxygen from the 'build' repository (enter doxygen, then the documentation is stored in 'doc' repository)
+- you can generate doxygen from the 'build' repository (enter doxygen, then the documentation is stored in 'res' repository)
 - you can run the gtest from the 'bin' repository
